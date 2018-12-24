@@ -248,8 +248,8 @@ public class SineScroll {
 
 		// grab a stream of 1x16 slivers, from top to bottom, left to right.
 		// every 16 of these slivers is one font glyph.
-		final Image img = new Image(Display.getCurrent(), "C:/perso/eclipse/workspace/Demos/src/org/mihalis/demos/SineScroll/font_classic_16x16.gif");
-
+		final String file = getClass().getResource("font_classic_16x16.gif").getFile();
+		final Image img = new Image(Display.getCurrent(), file);
 		final int w = img.getBounds().width;
 
 		int xpos = 0, ypos = 0;
