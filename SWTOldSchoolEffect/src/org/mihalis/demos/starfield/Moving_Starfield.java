@@ -35,7 +35,7 @@ public class Moving_Starfield {
 
 	private static final int NUMBER_OF_STARS = 1020;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -122,8 +122,10 @@ public class Moving_Starfield {
 			color.dispose();
 		}
 		gc.dispose();
-		redrawCanvas();
 		angle += 0.01f;
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -146,6 +148,7 @@ public class Moving_Starfield {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

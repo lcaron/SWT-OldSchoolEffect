@@ -38,7 +38,6 @@ public class Bump {
 
 	private final Display display;
 	private Canvas canvas;
-	private GC gc;
 	private int w, h;
 	private ImageData imageData;
 
@@ -83,8 +82,6 @@ public class Bump {
 		lY = (int) (CANVAS_HEIGHT / 2 + 80 * Math.sin(fTime));
 
 		imageData = new ImageData(w, h, 8, new PaletteData(colors));
-
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -115,7 +112,8 @@ public class Bump {
 		lX = (int) (CANVAS_WIDTH / 2 + 80 * Math.cos(fTime += .1));
 		lY = (int) (CANVAS_HEIGHT / 2 + 80 * Math.sin(fTime));
 
-		redrawCanvas();
+		if (!canvas.isDisposed())
+		canvas.redraw();
 	}
 
 	private Shell createWindow() {
@@ -129,8 +127,6 @@ public class Bump {
 		gdCanvas.heightHint = CANVAS_HEIGHT;
 		canvas.setLayoutData(gdCanvas);
 
-		gc = new GC(canvas);
-
 		canvas.addListener(SWT.Resize, new Listener() {
 			@Override
 			public void handleEvent(final Event e) {
@@ -142,13 +138,13 @@ public class Bump {
 		});
 
 		canvas.addPaintListener(e -> {
-			redrawCanvas();
+			redrawCanvas(e.gc);
 		});
 
 		return shell;
 	}
 
-	private void redrawCanvas() {
+	private void redrawCanvas(GC gc) {
 		if (imageData == null) {
 			return;
 		}

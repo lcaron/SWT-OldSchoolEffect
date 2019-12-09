@@ -35,7 +35,7 @@ public class Twister {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 100;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -44,12 +44,12 @@ public class Twister {
 	private static final int SINTABLESIZE = 256;
 
 	// Precalculated deformation tables
-	private int guim1[] = new int[SINTABLESIZE];
-	private int guim2[] = new int[SINTABLESIZE];
-	private int guim3[] = new int[SINTABLESIZE];
+	private final int guim1[] = new int[SINTABLESIZE];
+	private final int guim2[] = new int[SINTABLESIZE];
+	private final int guim3[] = new int[SINTABLESIZE];
 
 	// Precalculated torsion table
-	private float pas[] = new float[SINTABLESIZE];
+	private final float pas[] = new float[SINTABLESIZE];
 	private int[] palette;
 	private int roll = 0;
 
@@ -81,7 +81,8 @@ public class Twister {
 			final int tmp[] = new int[4];
 
 			for (int k = 0; k < 4; k++) {
-				tmp[k] = CANVAS_WIDTH / 2 - (int) ((CANVAS_WIDTH / 2 - 20) * Math.cos(k * Math.PI / 2 + i * (3 * Math.PI / SINTABLESIZE)));
+				tmp[k] = CANVAS_WIDTH / 2 - (int) ((CANVAS_WIDTH / 2 - 20)
+						* Math.cos(k * Math.PI / 2 + i * (3 * Math.PI / SINTABLESIZE)));
 				if (tmp[k] < min) {
 					min = tmp[k];
 					num_min = k;
@@ -92,14 +93,17 @@ public class Twister {
 			guim2[i] = tmp[num_min + 1 & 3];
 			guim3[i] = tmp[num_min + 2 & 3];
 
-			pas[i] = (float) (1.2 * Math.sin(i * 14f * Math.PI / SINTABLESIZE) * Math.cos(i * 2f * Math.PI / SINTABLESIZE));
+			pas[i] = (float) (1.2 * Math.sin(i * 14f * Math.PI / SINTABLESIZE)
+					* Math.cos(i * 2f * Math.PI / SINTABLESIZE));
 		}
 	}
 
 	public void animate() {
 		imageData = new ImageData(w, h, 24, new PaletteData(0xFF0000, 0xFF00, 0xFF));
 		doTwister();
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void doTwister() {
@@ -160,6 +164,7 @@ public class Twister {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

@@ -34,7 +34,7 @@ public class TwirlEffect {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -92,7 +92,6 @@ public class TwirlEffect {
 
 	public void animate() {
 		imageData = filter(image, new ImageData(w, h, image.depth, image.palette));
-		redrawCanvas();
 
 		angle += sens;
 
@@ -102,6 +101,9 @@ public class TwirlEffect {
 
 		if (angle > 15.7) { // 5 * PI
 			sens = -1 * STEP;
+		}
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
 		}
 	}
 
@@ -163,8 +165,8 @@ public class TwirlEffect {
 	/**
 	 * Bilinear interpolation of ARGB values.
 	 *
-	 * @param x the X interpolation parameter 0..1
-	 * @param y the y interpolation parameter 0..1
+	 * @param x   the X interpolation parameter 0..1
+	 * @param y   the y interpolation parameter 0..1
 	 * @param rgb array of four ARGB values in the order NW, NE, SW, SE
 	 * @return the interpolated value
 	 */
@@ -283,6 +285,7 @@ public class TwirlEffect {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

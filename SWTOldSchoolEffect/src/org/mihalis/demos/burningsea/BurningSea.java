@@ -13,8 +13,6 @@
 package org.mihalis.demos.burningsea;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -43,9 +41,8 @@ public class BurningSea {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
-	private GC gc;
 	private int w, h;
 	private ImageData imageData;
 
@@ -122,8 +119,6 @@ public class BurningSea {
 		t = 0;
 		fall = 0;
 		r1 = 0;
-
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -168,7 +163,8 @@ public class BurningSea {
 						if (r1 > 9000) {
 							r1 = 0;
 						}
-						int cblur = imageData.getPixel(ab - 1, bb + 1) + imageData.getPixel(ab + 1, bb + 1) + ran1[r1] * imageData.getPixel(ab, bb + 1) + imageData.getPixel(ab, bb) >> 2;
+						int cblur = imageData.getPixel(ab - 1, bb + 1) + imageData.getPixel(ab + 1, bb + 1)
+								+ ran1[r1] * imageData.getPixel(ab, bb + 1) + imageData.getPixel(ab, bb) >> 2;
 						if (cblur > 190) {
 							cblur = 190;
 						}
@@ -196,7 +192,9 @@ public class BurningSea {
 			}
 		}
 
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -210,8 +208,6 @@ public class BurningSea {
 		gdCanvas.heightHint = CANVAS_HEIGHT;
 		canvas.setLayoutData(gdCanvas);
 
-		gc = new GC(canvas);
-
 		canvas.addListener(SWT.Resize, new Listener() {
 			@Override
 			public void handleEvent(Event e) {
@@ -221,18 +217,12 @@ public class BurningSea {
 			}
 		});
 
-		canvas.addPaintListener(new PaintListener() {
-
-			@Override
-			public void paintControl(PaintEvent arg0) {
-				redrawCanvas();
-			}
-		});
+		canvas.addListener(SWT.Paint, e -> redrawCanvas(e.gc));
 
 		return shell;
 	}
 
-	private void redrawCanvas() {
+	private void redrawCanvas(GC gc) {
 		if (imageData == null) {
 			return;
 		}

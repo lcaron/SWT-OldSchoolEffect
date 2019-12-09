@@ -33,7 +33,7 @@ public class Sky2 {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -107,8 +107,9 @@ public class Sky2 {
 				imageData.setPixel(d, c + 184, sprite.getPixel(xs + 128, ys * 16 + 128 + c));
 			}
 		}
-
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void Shade(int x, int y, int xs, int ys, float rx, float ry) {
@@ -183,6 +184,7 @@ public class Sky2 {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

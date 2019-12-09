@@ -28,7 +28,6 @@ public class Dancing {
 
 	private final Display display;
 	private Canvas canvas;
-	private GC gc;
 	private int w, h;
 	private PlanIso plan;
 
@@ -38,14 +37,15 @@ public class Dancing {
 
 	public void init() {
 		plan = new PlanIso(w, h, 15, 15, 10);
-		redrawCanvas();
 	}
 
 	public void animate() {
 		if (plan != null) {
 			plan.next();
 		}
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -59,8 +59,6 @@ public class Dancing {
 		gdCanvas.heightHint = 480;
 		canvas.setLayoutData(gdCanvas);
 
-		gc = new GC(canvas);
-
 		canvas.addListener(SWT.Resize, e -> {
 			w = canvas.getClientArea().width;
 			h = canvas.getClientArea().height;
@@ -68,13 +66,13 @@ public class Dancing {
 		});
 
 		canvas.addPaintListener(e -> {
-			redrawCanvas();
+			redrawCanvas(e.gc);
 		});
 
 		return shell;
 	}
 
-	private void redrawCanvas() {
+	private void redrawCanvas(GC gc) {
 		final Image image = plan.render();
 		if (image != null) {
 			gc.drawImage(image, 0, 0);

@@ -34,7 +34,7 @@ public class FlatText {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -103,7 +103,9 @@ public class FlatText {
 			}
 		}
 
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -126,6 +128,7 @@ public class FlatText {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

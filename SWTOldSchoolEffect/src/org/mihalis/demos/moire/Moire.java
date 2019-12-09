@@ -28,7 +28,7 @@ public class Moire {
 	private static final int TIMER_INTERVAL = 10;
 	private static final int STEP = 12;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -70,8 +70,9 @@ public class Moire {
 		tempGC.drawImage(bigCircle, (int) posX, (int) posY);
 
 		tempGC.dispose();
-
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Image createCircles(int centerX, int centerY, int width, int height) {
@@ -109,6 +110,7 @@ public class Moire {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

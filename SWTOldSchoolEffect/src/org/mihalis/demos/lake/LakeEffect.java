@@ -36,7 +36,7 @@ public class LakeEffect {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 100;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 
@@ -68,7 +68,9 @@ public class LakeEffect {
 			currImage = 0;
 		}
 
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void createAnimation() {
@@ -101,7 +103,8 @@ public class LakeEffect {
 		final double d = 6.283185307179586D * paramInt / 12.0D;
 		final int i = (12 - paramInt) * imageWidth;
 		for (int j = 0; j < imageHeight; ++j) {
-			final int k = (int) (imageHeight / 14 * (j + 28.0D) * Math.sin(imageHeight / 14 * (imageHeight - j) / (j + 1) + d) / imageHeight);
+			final int k = (int) (imageHeight / 14 * (j + 28.0D)
+					* Math.sin(imageHeight / 14 * (imageHeight - j) / (j + 1) + d) / imageHeight);
 			if (j < -k) {
 				copyArea(paramGraphics, 12 * imageWidth, j, imageWidth, 1, -i, 0);
 			} else {
@@ -112,12 +115,12 @@ public class LakeEffect {
 	}
 
 	/**
-	 * @param x the <i>x</i> coordinate of the source rectangle.
-	 * @param y the <i>y</i> coordinate of the source rectangle.
-	 * @param width the width of the source rectangle.
+	 * @param x      the <i>x</i> coordinate of the source rectangle.
+	 * @param y      the <i>y</i> coordinate of the source rectangle.
+	 * @param width  the width of the source rectangle.
 	 * @param height the height of the source rectangle.
-	 * @param dx the horizontal distance to copy the pixels.
-	 * @param dy the vertical distance to copy the pixels.
+	 * @param dx     the horizontal distance to copy the pixels.
+	 * @param dy     the vertical distance to copy the pixels.
 	 */
 	private void copyArea(GC gc, int x, int y, int width, int height, int dx, int dy) {
 		gc.copyArea(x, y, width, height, x + dx, y + dy);
@@ -141,6 +144,7 @@ public class LakeEffect {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

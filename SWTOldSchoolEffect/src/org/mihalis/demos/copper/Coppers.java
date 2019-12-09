@@ -42,7 +42,6 @@ public class Coppers {
 
 	private final Display display;
 	private Canvas canvas;
-	private GC gc;
 	private int w, h;
 	private Image image;
 
@@ -178,8 +177,6 @@ public class Coppers {
 
 		// Init image
 		image = new Image(display, w, h);
-
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -264,7 +261,9 @@ public class Coppers {
 
 		GCTemp.dispose();
 
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void drawCopper(GC gc, int add) {
@@ -289,8 +288,6 @@ public class Coppers {
 		gdCanvas.heightHint = CANVAS_HEIGHT;
 		canvas.setLayoutData(gdCanvas);
 
-		gc = new GC(canvas);
-
 		canvas.addListener(SWT.Resize, new Listener() {
 			@Override
 			public void handleEvent(Event e) {
@@ -303,15 +300,15 @@ public class Coppers {
 		canvas.addPaintListener(new PaintListener() {
 
 			@Override
-			public void paintControl(PaintEvent arg0) {
-				redrawCanvas();
+			public void paintControl(PaintEvent e) {
+				redrawCanvas(e.gc);
 			}
 		});
 
 		return shell;
 	}
 
-	private void redrawCanvas() {
+	private void redrawCanvas(GC gc) {
 		if (image != null) {
 			gc.drawImage(image, 0, 0);
 		}

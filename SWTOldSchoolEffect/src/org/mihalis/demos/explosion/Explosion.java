@@ -36,9 +36,8 @@ public class Explosion {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
-	private GC gc;
 	private int w, h;
 	private ImageData imageData;
 
@@ -79,8 +78,6 @@ public class Explosion {
 		imageData = new ImageData(w, h, 8, new PaletteData(colors));
 
 		initParticles(true);
-
-		redrawCanvas();
 	}
 
 	private void initParticles(boolean create) {
@@ -108,7 +105,8 @@ public class Explosion {
 				particles[i].ypos += particles[i].ydir;
 
 				/* is particle dead? */
-				if (particles[i].ypos >= h - 3 || particles[i].colorindex == 0 || particles[i].xpos <= 1 || particles[i].xpos >= w - 3) {
+				if (particles[i].ypos >= h - 3 || particles[i].colorindex == 0 || particles[i].xpos <= 1
+						|| particles[i].xpos >= w - 3) {
 					particles[i].dead = true;
 					continue;
 				}
@@ -176,7 +174,9 @@ public class Explosion {
 			initParticles(false);
 		}
 
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -190,8 +190,6 @@ public class Explosion {
 		gdCanvas.heightHint = CANVAS_HEIGHT;
 		canvas.setLayoutData(gdCanvas);
 
-		gc = new GC(canvas);
-
 		canvas.addListener(SWT.Resize, e -> {
 			w = canvas.getClientArea().width;
 			h = canvas.getClientArea().height;
@@ -199,13 +197,13 @@ public class Explosion {
 		});
 
 		canvas.addPaintListener(e -> {
-			redrawCanvas();
+			redrawCanvas(e.gc);
 		});
 
 		return shell;
 	}
 
-	private void redrawCanvas() {
+	private void redrawCanvas(GC gc) {
 		if (imageData == null) {
 			return;
 		}

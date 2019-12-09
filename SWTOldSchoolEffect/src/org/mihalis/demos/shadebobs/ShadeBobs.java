@@ -36,7 +36,7 @@ public class ShadeBobs {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -47,7 +47,7 @@ public class ShadeBobs {
 	private int pathpath[];
 
 	/* the shadebob image to apply */
-	private int heat[][] = { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 }, //
+	private final int heat[][] = { { 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 }, //
 			{ 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 }, //
 			{ 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 0, 0, 0 }, //
 			{ 0, 0, 1, 1, 2, 2, 2, 3, 3, 2, 2, 2, 1, 1, 0, 0 }, //
@@ -152,8 +152,9 @@ public class ShadeBobs {
 			}
 		}
 		trail++;
-
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private int get_bob_x_location(int index) {
@@ -184,6 +185,7 @@ public class ShadeBobs {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

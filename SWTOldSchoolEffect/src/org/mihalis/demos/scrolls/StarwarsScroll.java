@@ -34,15 +34,16 @@ public class StarwarsScroll {
 	private static final int CANVAS_WIDTH = 480;
 	private static final int CANVAS_HEIGHT = 360;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
 	private Image image;
 
 	//
-	private String[] text = { "ligne 1", "ligne 1 fgsdfsdfgsdf", "ligne 1 sdfg sdg sdfg  sgf s seg", "ligne 1", "ligne 1 sdfgsdfgsdfgdg", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1",
-			"ligne 1", "ligne 1", "ligne 1", "ligne 1" };
+	private final String[] text = { "ligne 1", "ligne 1 fgsdfsdfgsdf", "ligne 1 sdfg sdg sdfg  sgf s seg", "ligne 1",
+			"ligne 1 sdfgsdfgsdfgdg", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1",
+			"ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1" };
 	private static final String FONT = "Lucida Sans";
 	private static final int FONT_SIZE = 16;
 	private int y;
@@ -98,7 +99,9 @@ public class StarwarsScroll {
 		font.dispose();
 		gcT.dispose();
 		imageTmp.dispose();
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -121,6 +124,7 @@ public class StarwarsScroll {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 		return shell;

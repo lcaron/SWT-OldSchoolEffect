@@ -34,7 +34,7 @@ public class RotoZoom {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -79,8 +79,9 @@ public class RotoZoom {
 		draw_tile(roto[path], roto[path + 128 & 255], roto2[zpath]);
 		path = path - 1 & 255;
 		zpath = zpath + 1 & 255;
-
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void draw_tile(int stepx, int stepy, int zoom) {
@@ -92,14 +93,13 @@ public class RotoZoom {
 
 		/*
 		 * Stepping across and down the screen, each screen row has a starting
-		 * coordinate in the texture: (sx, sy). As each screen row is traversed,
-		 * the current texture coordinate (x, y) is modified by (xd, yd), which
-		 * are (sin(rot), cos(rot)) multiplied by the current zoom factor. For
-		 * each vertical step, (xd, yd) is rotated 90 degrees, to become (-yd,
-		 * xd).
+		 * coordinate in the texture: (sx, sy). As each screen row is traversed, the
+		 * current texture coordinate (x, y) is modified by (xd, yd), which are
+		 * (sin(rot), cos(rot)) multiplied by the current zoom factor. For each vertical
+		 * step, (xd, yd) is rotated 90 degrees, to become (-yd, xd).
 		 *
-		 * More fun can be had by playing around with x, y, xd, and yd as you
-		 * move about the image.
+		 * More fun can be had by playing around with x, y, xd, and yd as you move about
+		 * the image.
 		 */
 
 		int index = 0;
@@ -141,6 +141,7 @@ public class RotoZoom {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

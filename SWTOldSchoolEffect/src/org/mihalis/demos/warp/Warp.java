@@ -35,13 +35,13 @@ public class Warp {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 30;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
 	private ImageData imageData;
 
-	private Point[][] distorsionTable = new Point[CANVAS_HEIGHT / 2][CANVAS_WIDTH / 2];
+	private final Point[][] distorsionTable = new Point[CANVAS_HEIGHT / 2][CANVAS_WIDTH / 2];
 	private static final int TEXTUREWIDTH = 256;
 	private static final int TEXTUREHEIGHT = 256;
 	private int[] texture;
@@ -84,7 +84,9 @@ public class Warp {
 
 	public void animate() {
 		doWarp();
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void doWarp() {
@@ -148,6 +150,7 @@ public class Warp {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

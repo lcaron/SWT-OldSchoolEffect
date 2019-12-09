@@ -37,7 +37,6 @@ public class Blob {
 
 	private final Display display;
 	private Canvas canvas;
-	private GC gc;
 	private int w, h;
 	private ImageData imageData;
 
@@ -81,7 +80,6 @@ public class Blob {
 		}
 
 		imageData = new ImageData(w, h, 8, new PaletteData(colors));
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -111,7 +109,8 @@ public class Blob {
 				blobs[k].y = (h >> 1) - BLOB_RADIUS;
 			}
 		}
-		redrawCanvas();
+		if (!canvas.isDisposed())
+		canvas.redraw();
 	}
 
 	private void setPixel(int i, int value) {
@@ -127,13 +126,11 @@ public class Blob {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_BACKGROUND);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;
 		canvas.setLayoutData(gdCanvas);
-
-		gc = new GC(canvas);
 
 		canvas.addListener(SWT.Resize, e -> {
 			w = canvas.getClientArea().width;
@@ -142,13 +139,13 @@ public class Blob {
 		});
 
 		canvas.addListener(SWT.Paint, e -> {
-			redrawCanvas();
+			redrawCanvas(e.gc);
 		});
 
 		return shell;
 	}
 
-	private void redrawCanvas() {
+	private void redrawCanvas(GC gc) {
 		if (imageData == null) {
 			return;
 		}

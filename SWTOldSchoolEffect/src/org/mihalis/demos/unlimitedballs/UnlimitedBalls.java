@@ -26,7 +26,7 @@ public class UnlimitedBalls {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -66,39 +66,39 @@ public class UnlimitedBalls {
 		ball = new Image(display, getClass().getResourceAsStream("ball.gif"));
 
 		switch (currentShape) {
-			case 0:
-				// First set of parameter
-				xspeed = 100;
-				yspeed = 100;
-				xrspeed = 4150;
-				yrspeed = 4150;
-				xstart = 0;
-				ystart = 0;
-				xrstart = 0;
-				yrstart = 4150;
-				break;
-			case 1:
-				// Second set of parameter
-				xspeed = 199999;
-				yspeed = 100;
-				xrspeed = 550;
-				yrspeed = 950;
-				xstart = 0;
-				ystart = 50;
-				xrstart = 0;
-				yrstart = 0;
-				break;
-			default:
-				// Third set of parameter
-				xspeed = 100;
-				yspeed = 150;
-				xrspeed = 2200;
-				yrspeed = 1100;
-				xstart = 0;
-				ystart = 150;
-				xrstart = 0;
-				yrstart = 1100;
-				break;
+		case 0:
+			// First set of parameter
+			xspeed = 100;
+			yspeed = 100;
+			xrspeed = 4150;
+			yrspeed = 4150;
+			xstart = 0;
+			ystart = 0;
+			xrstart = 0;
+			yrstart = 4150;
+			break;
+		case 1:
+			// Second set of parameter
+			xspeed = 199999;
+			yspeed = 100;
+			xrspeed = 550;
+			yrspeed = 950;
+			xstart = 0;
+			ystart = 50;
+			xrstart = 0;
+			yrstart = 0;
+			break;
+		default:
+			// Third set of parameter
+			xspeed = 100;
+			yspeed = 150;
+			xrspeed = 2200;
+			yrspeed = 1100;
+			xstart = 0;
+			ystart = 150;
+			xrstart = 0;
+			yrstart = 1100;
+			break;
 		}
 	}
 
@@ -118,7 +118,9 @@ public class UnlimitedBalls {
 			tempGC.dispose();
 			current++;
 		}
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -141,6 +143,7 @@ public class UnlimitedBalls {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

@@ -33,7 +33,7 @@ public class Lens {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -63,34 +63,33 @@ public class Lens {
 		final int d = LENS_ZOOM;
 
 		/*
-		 * the shift in the following expression is a function of the distance
-		 * of the current point from the center of the sphere. If you imagine:
+		 * the shift in the following expression is a function of the distance of the
+		 * current point from the center of the sphere. If you imagine:
 		 *
 		 * eye
 		 *
-		 * .-~~~~~~~-. sphere surface .` '. --------------- viewing plane .
-		 * center of sphere
+		 * .-~~~~~~~-. sphere surface .` '. --------------- viewing plane . center of
+		 * sphere
 		 *
-		 * For each point across the viewing plane, draw a line from the point
-		 * on the sphere directly above that point to the center of the sphere.
-		 * It will intersect the viewing plane somewhere closer to the center of
-		 * the sphere than the original point. The shift function below is the
-		 * end result of the above math, given that the height of the point on
-		 * the sphere can be derived from:
+		 * For each point across the viewing plane, draw a line from the point on the
+		 * sphere directly above that point to the center of the sphere. It will
+		 * intersect the viewing plane somewhere closer to the center of the sphere than
+		 * the original point. The shift function below is the end result of the above
+		 * math, given that the height of the point on the sphere can be derived from:
 		 *
 		 * x^2 + y^2 + z^2 = radius^2
 		 *
 		 * x and y are known, z is based on the height of the viewing plane.
 		 *
-		 * The radius of the sphere is the distance from the center of the
-		 * sphere to the edge of the viewing plane, which is a neat little
-		 * triangle. If d = the distance from the center of the sphere to the
-		 * center of the plane (aka, LENS_ZOOM) and r = half the width of the
-		 * plane (aka, LENS_WIDTH/2) then radius^2 = d^2 + r^2.
+		 * The radius of the sphere is the distance from the center of the sphere to the
+		 * edge of the viewing plane, which is a neat little triangle. If d = the
+		 * distance from the center of the sphere to the center of the plane (aka,
+		 * LENS_ZOOM) and r = half the width of the plane (aka, LENS_WIDTH/2) then
+		 * radius^2 = d^2 + r^2.
 		 *
-		 * Things become simpler if we take z=0 to be at the plane's height
-		 * rather than the center of the sphere, turning the z^2 in the
-		 * expression above to (z+d)^2, since the center is now at (0, 0, -d).
+		 * Things become simpler if we take z=0 to be at the plane's height rather than
+		 * the center of the sphere, turning the z^2 in the expression above to (z+d)^2,
+		 * since the center is now at (0, 0, -d).
 		 *
 		 * So, the resulting function looks like:
 		 *
@@ -110,26 +109,25 @@ public class Lens {
 		 *
 		 * x = (-b +- sqrt(b^2 - 4ac)) / 2a
 		 *
-		 * We can ignore the negative result, because we want the point at the
-		 * top of the sphere, not at the bottom.
+		 * We can ignore the negative result, because we want the point at the top of
+		 * the sphere, not at the bottom.
 		 *
 		 * x = (-2d + sqrt(4d^2 - 4 * (x^2 + y^2 - r^2))) / 2
 		 *
-		 * Note that you can take the -4 out of both expressions in the square
-		 * root to put -2 outside, which then cancels out the division:
+		 * Note that you can take the -4 out of both expressions in the square root to
+		 * put -2 outside, which then cancels out the division:
 		 *
 		 * z = -d + sqrt(d^2 - (x^2 + y^2 - r^2))
 		 *
-		 * This now gives us the height of the point on the sphere directly
-		 * above the equivalent point on the plane. Next we need to find where
-		 * the line between this point and the center of the sphere at (0, 0,
-		 * -d) intersects the viewing plane at (?, ?, 0). This is a matter of
-		 * the ratio of line below the plane vs the total line length,
-		 * multiplied by the (x,y) coordinates. This ratio can be worked out by
-		 * the height of the line fragment below the plane, which is d, and the
-		 * total height of the line, which is d + z, or the height above the
-		 * plane of the sphere surface plus the height of the plane above the
-		 * center of the sphere.
+		 * This now gives us the height of the point on the sphere directly above the
+		 * equivalent point on the plane. Next we need to find where the line between
+		 * this point and the center of the sphere at (0, 0, -d) intersects the viewing
+		 * plane at (?, ?, 0). This is a matter of the ratio of line below the plane vs
+		 * the total line length, multiplied by the (x,y) coordinates. This ratio can be
+		 * worked out by the height of the line fragment below the plane, which is d,
+		 * and the total height of the line, which is d + z, or the height above the
+		 * plane of the sphere surface plus the height of the plane above the center of
+		 * the sphere.
 		 *
 		 * ratio = d/(d + z)
 		 *
@@ -141,21 +139,20 @@ public class Lens {
 		 *
 		 * ratio = d/sqrt(d^2 - (x^2 + y^2 - r^2))
 		 *
-		 * Since d and r are constant, we now have a formula we can apply for
-		 * each (x,y) point within the sphere to give the (x',y') coordinates of
-		 * the point we should draw to project the image on the plane to the
-		 * surface of the sphere. I subtract the original (x,y) coordinates to
-		 * give an offset rather than an absolute coordinate, then convert that
-		 * offset to the image dimensions, and store the offset in a matrix the
-		 * size of the intersecting circle. Drawing the lens is then a matter
-		 * of:
+		 * Since d and r are constant, we now have a formula we can apply for each (x,y)
+		 * point within the sphere to give the (x',y') coordinates of the point we
+		 * should draw to project the image on the plane to the surface of the sphere. I
+		 * subtract the original (x,y) coordinates to give an offset rather than an
+		 * absolute coordinate, then convert that offset to the image dimensions, and
+		 * store the offset in a matrix the size of the intersecting circle. Drawing the
+		 * lens is then a matter of:
 		 *
 		 * screen[coordinate] = image[coordinate + lens[y][x]]
 		 */
 
 		/*
-		 * it is sufficient to generate 1/4 of the lens and reflect this around;
-		 * a sphere is mirrored on both the x and y axes
+		 * it is sufficient to generate 1/4 of the lens and reflect this around; a
+		 * sphere is mirrored on both the x and y axes
 		 */
 		for (int y = 0; y < LENS_WIDTH >> 1; y++) {
 			for (int x = 0; x < LENS_WIDTH >> 1; x++) {
@@ -199,8 +196,9 @@ public class Lens {
 		if (_y > h - LENS_WIDTH - 15 || _y < 15) {
 			yd = -yd;
 		}
-
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void applyLens(int ox, int oy) {
@@ -236,6 +234,7 @@ public class Lens {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

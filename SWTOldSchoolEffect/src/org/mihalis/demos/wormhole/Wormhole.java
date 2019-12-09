@@ -34,7 +34,7 @@ public class Wormhole {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 30;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -106,7 +106,8 @@ public class Wormhole {
 				y += YCENTER;
 
 				if (x >= 0 && x < MAXX && y >= 0 && y < MAXY) {
-					wormImg[(int) x + (int) y * MAXX] = (byte) (i / 8 % TEXTUREWIDTH + TEXTUREWIDTH * (j / 7 % TEXTUREWIDTH));
+					wormImg[(int) x
+							+ (int) y * MAXX] = (byte) (i / 8 % TEXTUREWIDTH + TEXTUREWIDTH * (j / 7 % TEXTUREWIDTH));
 				}
 			}
 		}
@@ -114,7 +115,9 @@ public class Wormhole {
 
 	public void animate() {
 		doWormhole();
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void doWormhole() {
@@ -218,6 +221,7 @@ public class Wormhole {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

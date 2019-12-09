@@ -35,7 +35,7 @@ public class WaveEffect {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -103,12 +103,18 @@ public class WaveEffect {
 		for (int i = 0; i < COLS; ++i) {
 			for (int j = 0; j < LINES; ++j) {
 				if (kind == 0) {
-					xPos[i][j] = (int) (patternWidth + 15 * i + 10.0D * Math.cos(position * (1.0D + 0.01D * i + 0.015D * j)));
-					yPos[i][j] = (int) (patternHeight + 15 * j - 10.0D * Math.sin(position * (1.0D + 0.0123D * j + 0.012D * i)));
+					xPos[i][j] = (int) (patternWidth + 15 * i
+							+ 10.0D * Math.cos(position * (1.0D + 0.01D * i + 0.015D * j)));
+					yPos[i][j] = (int) (patternHeight + 15 * j
+							- 10.0D * Math.sin(position * (1.0D + 0.0123D * j + 0.012D * i)));
 				}
 				if (kind == 1) {
-					xPos[i][j] = (int) (patternWidth + 15 * i + 20.0D * Math.sin(position * (1.0D + 0.0059D * j + 0.00639D * i)) * Math.cos(position + 0.3D * i + 0.3D * j));
-					yPos[i][j] = (int) (patternHeight + 15 * j - 20.0D * Math.cos(position * (1.0D - 0.073D * j + 0.008489999999999999D * i)) * Math.sin(position + 0.23D * j + 0.389D * i));
+					xPos[i][j] = (int) (patternWidth + 15 * i
+							+ 20.0D * Math.sin(position * (1.0D + 0.0059D * j + 0.00639D * i))
+									* Math.cos(position + 0.3D * i + 0.3D * j));
+					yPos[i][j] = (int) (patternHeight + 15 * j
+							- 20.0D * Math.cos(position * (1.0D - 0.073D * j + 0.008489999999999999D * i))
+									* Math.sin(position + 0.23D * j + 0.389D * i));
 				}
 				if (kind == 2) {
 					xPos[i][j] = (int) (centerX + 14.0D * i * Math.cos(0.01D * (40.0D - i) * position + j));
@@ -164,7 +170,9 @@ public class WaveEffect {
 		GCTemp.drawString("Click to change the effect (Here is effect #" + (kind + 1) + ")", 10, 10);
 
 		GCTemp.dispose();
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -187,6 +195,7 @@ public class WaveEffect {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

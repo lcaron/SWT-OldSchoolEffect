@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class Tunnel1 {
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -64,7 +64,8 @@ public class Tunnel1 {
 			for (int y = 0; y < h; y++) {
 				int angle, distance;
 				final float ratio = 32.0f;
-				distance = (int) Math.floor(ratio * TEX_HEIGHT / Math.sqrt((x - w / 2.0) * (x - w / 2.0) + (y - h / 2.0) * (y - h / 2.0)) % TEX_HEIGHT);
+				distance = (int) Math.floor(ratio * TEX_HEIGHT
+						/ Math.sqrt((x - w / 2.0) * (x - w / 2.0) + (y - h / 2.0) * (y - h / 2.0)) % TEX_HEIGHT);
 				angle = (int) Math.floor(0.5 * TEX_WIDTH * Math.atan2(y - h / 2.0, x - w / 2.0) / 3.1416);
 				distanceTable[x][y] = distance;
 				angleTable[x][y] = angle;
@@ -72,7 +73,6 @@ public class Tunnel1 {
 		}
 
 		animation = 0f;
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -82,14 +82,17 @@ public class Tunnel1 {
 
 		for (int x = 0; x < w; x++) {
 			for (int y = 0; y < h; y++) {
-				// get the texel from the texture by using the tables, shifted with the animation values
-				final int color = texture[Math.abs((distanceTable[x][y] + shiftX) % TEX_WIDTH)][Math.abs((angleTable[x][y] + shiftY) % TEX_HEIGHT)];
+				// get the texel from the texture by using the tables, shifted with the
+				// animation values
+				final int color = texture[Math.abs((distanceTable[x][y] + shiftX) % TEX_WIDTH)][Math
+						.abs((angleTable[x][y] + shiftY) % TEX_HEIGHT)];
 				imageData.setPixel(x, y, color);
 			}
 		}
 		animation += 0.05f;
-		redrawCanvas();
-
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -112,6 +115,7 @@ public class Tunnel1 {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

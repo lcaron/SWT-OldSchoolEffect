@@ -35,7 +35,7 @@ public class Mandelbrot {
 	private final int MAX_ITER = 570;
 	private final double ZOOM = 150;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -47,12 +47,13 @@ public class Mandelbrot {
 
 	public void init() {
 		imageData = new ImageData(w, h, 24, new PaletteData(0xFF0000, 0xFF00, 0xFF));
-		redrawCanvas();
 	}
 
 	public void draw() {
 		drawMandelbrot();
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void drawMandelbrot() {
@@ -95,6 +96,7 @@ public class Mandelbrot {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

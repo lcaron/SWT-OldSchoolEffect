@@ -25,9 +25,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class Fire {
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
-	private GC gc;
 	private int w, h;
 	private ImageData imageData;
 	private int[] palette;
@@ -60,8 +59,6 @@ public class Fire {
 		}
 
 		imageData = new ImageData(w, h, 24, new PaletteData(0xFF0000, 0xFF00, 0xFF));
-		redrawCanvas();
-
 	}
 
 	public void animate() {
@@ -73,7 +70,8 @@ public class Fire {
 		// do the fire calculations for every pixel, from top to bottom
 		for (int y = 0; y < h - 1; y++) {
 			for (int x = 0; x < w; x++) {
-				fire[x][y] = (fire[(x - 1 + w) % w][(y + 1) % h] + fire[x % w][(y + 1) % h] + fire[(x + 1) % w][(y + 1) % h] + fire[x % w][(y + 2) % h]) * 32 / 129;
+				fire[x][y] = (fire[(x - 1 + w) % w][(y + 1) % h] + fire[x % w][(y + 1) % h]
+						+ fire[(x + 1) % w][(y + 1) % h] + fire[x % w][(y + 2) % h]) * 32 / 129;
 			}
 		}
 
@@ -84,7 +82,9 @@ public class Fire {
 			}
 
 		}
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private int HSLtoRGB(float _h, float _s, float _l) {
@@ -167,8 +167,6 @@ public class Fire {
 		gdCanvas.heightHint = 256;
 		canvas.setLayoutData(gdCanvas);
 
-		gc = new GC(canvas);
-
 		canvas.addListener(SWT.Resize, e -> {
 			w = canvas.getClientArea().width;
 			h = canvas.getClientArea().height;
@@ -176,13 +174,13 @@ public class Fire {
 		});
 
 		canvas.addPaintListener(e -> {
-			redrawCanvas();
+			redrawCanvas(e.gc);
 		});
 
 		return shell;
 	}
 
-	private void redrawCanvas() {
+	private void redrawCanvas(GC gc) {
 		if (imageData == null) {
 			return;
 		}

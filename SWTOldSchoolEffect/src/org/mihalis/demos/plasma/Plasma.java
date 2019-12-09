@@ -35,13 +35,13 @@ public class Plasma {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
 	private ImageData imageData;
 	private int[] palette;
-	private int sin[] = new int[1800];
+	private final int sin[] = new int[1800];
 	private int plasmaIndex = 1;
 
 	public Plasma(Display display) {
@@ -106,7 +106,9 @@ public class Plasma {
 
 	public void animate() {
 		drawPlasma();
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void drawPlasma() {
@@ -117,10 +119,12 @@ public class Plasma {
 		}
 
 		for (int x = 0; x < CANVAS_WIDTH; x++) {
-			final int indexX = 75 + (sin[(x << 1) + (plasmaIndex >> 1)] + sin[x + (plasmaIndex << 1)] + (sin[(x >> 1) + plasmaIndex] << 1) >> 6);
+			final int indexX = 75 + (sin[(x << 1) + (plasmaIndex >> 1)] + sin[x + (plasmaIndex << 1)]
+					+ (sin[(x >> 1) + plasmaIndex] << 1) >> 6);
 
 			for (int y = 0; y < CANVAS_HEIGHT; y++) {
-				final int indexY = 75 + ((sin[y + (plasmaIndex << 1)] << 1) + sin[(y << 1) + (plasmaIndex >> 1)] + (sin[y + plasmaIndex] << 1) >> 5);
+				final int indexY = 75 + ((sin[y + (plasmaIndex << 1)] << 1) + sin[(y << 1) + (plasmaIndex >> 1)]
+						+ (sin[y + plasmaIndex] << 1) >> 5);
 				final int colorIndex = Math.abs((indexX * indexY >> 5) % 256);
 				imageData.setPixel(x, y, palette[colorIndex]);
 			}
@@ -147,6 +151,7 @@ public class Plasma {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

@@ -35,7 +35,7 @@ public class Ripple {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 1000 / 30;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 
@@ -86,15 +86,15 @@ public class Ripple {
 				disturb(e.x, e.y);
 			}
 		});
-
-		redrawCanvas();
 	}
 
 	public void animate() {
 		newframe();
 		// Copie ripple dans offImage
 		offImage.setPixels(0, 0, width * height, ripple, 0);
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void newframe() {
@@ -108,7 +108,8 @@ public class Ripple {
 		mapind = oldind;
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				short data = (short) (ripplemap[mapind - width] + ripplemap[mapind + width] + ripplemap[mapind - 1] + ripplemap[mapind + 1] >> 1);
+				short data = (short) (ripplemap[mapind - width] + ripplemap[mapind + width] + ripplemap[mapind - 1]
+						+ ripplemap[mapind + 1] >> 1);
 				data -= ripplemap[newind + i];
 				data -= data >> 5;
 				ripplemap[newind + i] = data;
@@ -159,6 +160,7 @@ public class Ripple {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

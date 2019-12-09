@@ -35,7 +35,7 @@ public class RasterBars {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -81,7 +81,9 @@ public class RasterBars {
 	public void animate() {
 		drawBackground();
 		drawBars();
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 		offset1 += 2;
 		offset2 += 2;
 	}
@@ -202,6 +204,7 @@ public class RasterBars {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

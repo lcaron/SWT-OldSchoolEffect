@@ -34,7 +34,7 @@ public class BlockEffect {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -77,8 +77,9 @@ public class BlockEffect {
 		if (blockSize == w / 4) {
 			sens = -1;
 		}
-
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private ImageData filter(ImageData src, int blockSize) {
@@ -167,6 +168,7 @@ public class BlockEffect {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

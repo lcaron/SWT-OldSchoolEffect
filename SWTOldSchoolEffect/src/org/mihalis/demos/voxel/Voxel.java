@@ -35,7 +35,7 @@ public class Voxel {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -334,8 +334,9 @@ public class Voxel {
 		image = null;
 		image = new Image(display, imageData);
 		imageData = null;
-
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	public int abs(int x) {
@@ -383,6 +384,7 @@ public class Voxel {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

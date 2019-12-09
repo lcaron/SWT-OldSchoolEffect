@@ -144,8 +144,9 @@ public class SineScroll {
 		}
 
 		imageData.setPixels(0, 0, scrPix.length, scrPix, 0);
-
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -173,7 +174,8 @@ public class SineScroll {
 		canvas.addPaintListener(new PaintListener() {
 
 			@Override
-			public void paintControl(final PaintEvent arg0) {
+			public void paintControl(final PaintEvent e) {
+				gc = e.gc;
 				redrawCanvas();
 			}
 		});
@@ -337,7 +339,8 @@ public class SineScroll {
 		// amplitude of screen height - 18 (16 pixel high font).
 		final double ampl = (h - 18) / 2;
 		for (int i = 0; i < sine.length; i++) {
-			sine[i] = (int) (Math.sin(i * 0.50 * Math.PI / 256.0) * Math.sin(i * 0.75 * Math.PI / 256.0) * ampl + ampl) + 1;
+			sine[i] = (int) (Math.sin(i * 0.50 * Math.PI / 256.0) * Math.sin(i * 0.75 * Math.PI / 256.0) * ampl + ampl)
+					+ 1;
 		}
 
 	}

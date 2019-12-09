@@ -36,7 +36,7 @@ public class SpecialImageLoader {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -75,7 +75,9 @@ public class SpecialImageLoader {
 
 		// Animation
 		currentLine--;
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -98,6 +100,7 @@ public class SpecialImageLoader {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

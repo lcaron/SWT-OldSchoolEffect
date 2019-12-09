@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class Tunnel3 {
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -84,21 +84,27 @@ public class Tunnel3 {
 		final int shiftY = (int) (TEX_HEIGHT * 0.25 * animation);
 
 		// calculate the look values out of the animation value
-		// by using sine functions, it'll alternate between looking left/right and up/down
-		// make sure that x + shiftLookX never goes outside the dimensions of the table, same for y
+		// by using sine functions, it'll alternate between looking left/right and
+		// up/down
+		// make sure that x + shiftLookX never goes outside the dimensions of the table,
+		// same for y
 		final int shiftLookX = w / 2 + (int) (w / 2 * Math.sin(animation));
 		final int shiftLookY = h / 2 + (int) (h / 2 * Math.sin(animation * 2.0));
 
 		for (int x = 0; x < w; x++) {
 			for (int y = 0; y < h; y++) {
-				// get the texel from the texture by using the tables, shifted with the animation values
-				final int color = texture[Math.abs((distanceTable[x + shiftLookX][y + shiftLookY] + shiftX) % TEX_WIDTH)][Math.abs((angleTable[x + shiftLookX][y + shiftLookY] + shiftY) % TEX_HEIGHT)];
+				// get the texel from the texture by using the tables, shifted with the
+				// animation values
+				final int color = texture[Math
+						.abs((distanceTable[x + shiftLookX][y + shiftLookY] + shiftX) % TEX_WIDTH)][Math
+								.abs((angleTable[x + shiftLookX][y + shiftLookY] + shiftY) % TEX_HEIGHT)];
 				imageData.setPixel(x, y, color);
 			}
 		}
 		animation += 0.02f;
-		redrawCanvas();
-
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -121,6 +127,7 @@ public class Tunnel3 {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 

@@ -34,7 +34,7 @@ public class SineWave {
 	// The timer interval in milliseconds
 	private static final int TIMER_INTERVAL = 10;
 
-	private Display display;
+	private final Display display;
 	private Canvas canvas;
 	private GC gc;
 	private int w, h;
@@ -165,8 +165,9 @@ public class SineWave {
 			current_effect %= MAX_EFFECTS;
 
 		}
-
-		redrawCanvas();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private void copy_image(ImageData src, Rectangle rSrc, ImageData dest, Rectangle rDest) {
@@ -203,6 +204,7 @@ public class SineWave {
 		});
 
 		canvas.addPaintListener(e -> {
+			gc = e.gc;
 			redrawCanvas();
 		});
 
