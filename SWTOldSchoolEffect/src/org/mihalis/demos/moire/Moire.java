@@ -53,8 +53,6 @@ public class Moire {
 		final ImageData data = temp.getImageData();
 		data.transparentPixel = data.palette.getPixel(new RGB(255, 255, 255));
 		bigCircle = new Image(display, data);
-
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -95,7 +93,7 @@ public class Moire {
 		shell.setText("Moire");
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = 256;
 		gdCanvas.heightHint = 256;

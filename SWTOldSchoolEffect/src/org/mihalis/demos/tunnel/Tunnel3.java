@@ -75,7 +75,6 @@ public class Tunnel3 {
 		}
 
 		animation = 0f;
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -95,9 +94,7 @@ public class Tunnel3 {
 			for (int y = 0; y < h; y++) {
 				// get the texel from the texture by using the tables, shifted with the
 				// animation values
-				final int color = texture[Math
-						.abs((distanceTable[x + shiftLookX][y + shiftLookY] + shiftX) % TEX_WIDTH)][Math
-								.abs((angleTable[x + shiftLookX][y + shiftLookY] + shiftY) % TEX_HEIGHT)];
+				final int color = texture[Math.abs((distanceTable[x + shiftLookX][y + shiftLookY] + shiftX) % TEX_WIDTH)][Math.abs((angleTable[x + shiftLookX][y + shiftLookY] + shiftY) % TEX_HEIGHT)];
 				imageData.setPixel(x, y, color);
 			}
 		}
@@ -112,7 +109,7 @@ public class Tunnel3 {
 		shell.setText("Tunnel");
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = 256;
 		gdCanvas.heightHint = 256;

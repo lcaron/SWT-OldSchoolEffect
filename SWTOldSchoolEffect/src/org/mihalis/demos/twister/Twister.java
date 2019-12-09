@@ -60,7 +60,6 @@ public class Twister {
 	public void init() {
 		createColors();
 		initSinTables();
-		redrawCanvas();
 	}
 
 	private void createColors() {
@@ -81,8 +80,7 @@ public class Twister {
 			final int tmp[] = new int[4];
 
 			for (int k = 0; k < 4; k++) {
-				tmp[k] = CANVAS_WIDTH / 2 - (int) ((CANVAS_WIDTH / 2 - 20)
-						* Math.cos(k * Math.PI / 2 + i * (3 * Math.PI / SINTABLESIZE)));
+				tmp[k] = CANVAS_WIDTH / 2 - (int) ((CANVAS_WIDTH / 2 - 20) * Math.cos(k * Math.PI / 2 + i * (3 * Math.PI / SINTABLESIZE)));
 				if (tmp[k] < min) {
 					min = tmp[k];
 					num_min = k;
@@ -93,8 +91,7 @@ public class Twister {
 			guim2[i] = tmp[num_min + 1 & 3];
 			guim3[i] = tmp[num_min + 2 & 3];
 
-			pas[i] = (float) (1.2 * Math.sin(i * 14f * Math.PI / SINTABLESIZE)
-					* Math.cos(i * 2f * Math.PI / SINTABLESIZE));
+			pas[i] = (float) (1.2 * Math.sin(i * 14f * Math.PI / SINTABLESIZE) * Math.cos(i * 2f * Math.PI / SINTABLESIZE));
 		}
 	}
 
@@ -149,7 +146,7 @@ public class Twister {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

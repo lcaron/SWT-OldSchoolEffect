@@ -6,8 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.swt_3.109.0.v20181204-1801.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.swt.gtk.linux.x86_64_3.109.0.v20181204-1801.jar" sourcepath="lib/org.eclipse.swt.gtk.linux.x86_64.source_3.109.0.v20181204-1801.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.swt.gtk.linux.x86_64.source_3.109.0.v20181204-1801.jar"/>
+	<classpathentry kind="lib" path="lib/swt-win32.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -57,7 +57,6 @@ public class SpecialImageLoader {
 		image = new ImageData(getClass().getResourceAsStream("tuxblackbg.png"));
 
 		imageData = new ImageData(w, h, image.depth, image.palette);
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -85,7 +84,7 @@ public class SpecialImageLoader {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

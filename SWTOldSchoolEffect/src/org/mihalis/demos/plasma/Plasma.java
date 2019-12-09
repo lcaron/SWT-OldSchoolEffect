@@ -52,7 +52,6 @@ public class Plasma {
 		createColors();
 		precomputeSin();
 		imageData = new ImageData(w, h, 24, new PaletteData(0xFF0000, 0xFF00, 0xFF));
-		redrawCanvas();
 	}
 
 	private void createColors() {
@@ -119,12 +118,10 @@ public class Plasma {
 		}
 
 		for (int x = 0; x < CANVAS_WIDTH; x++) {
-			final int indexX = 75 + (sin[(x << 1) + (plasmaIndex >> 1)] + sin[x + (plasmaIndex << 1)]
-					+ (sin[(x >> 1) + plasmaIndex] << 1) >> 6);
+			final int indexX = 75 + (sin[(x << 1) + (plasmaIndex >> 1)] + sin[x + (plasmaIndex << 1)] + (sin[(x >> 1) + plasmaIndex] << 1) >> 6);
 
 			for (int y = 0; y < CANVAS_HEIGHT; y++) {
-				final int indexY = 75 + ((sin[y + (plasmaIndex << 1)] << 1) + sin[(y << 1) + (plasmaIndex >> 1)]
-						+ (sin[y + plasmaIndex] << 1) >> 5);
+				final int indexY = 75 + ((sin[y + (plasmaIndex << 1)] << 1) + sin[(y << 1) + (plasmaIndex >> 1)] + (sin[y + plasmaIndex] << 1) >> 5);
 				final int colorIndex = Math.abs((indexX * indexY >> 5) % 256);
 				imageData.setPixel(x, y, palette[colorIndex]);
 			}
@@ -136,7 +133,7 @@ public class Plasma {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

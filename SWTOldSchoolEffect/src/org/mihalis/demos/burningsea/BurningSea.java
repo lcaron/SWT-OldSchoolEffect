@@ -163,8 +163,7 @@ public class BurningSea {
 						if (r1 > 9000) {
 							r1 = 0;
 						}
-						int cblur = imageData.getPixel(ab - 1, bb + 1) + imageData.getPixel(ab + 1, bb + 1)
-								+ ran1[r1] * imageData.getPixel(ab, bb + 1) + imageData.getPixel(ab, bb) >> 2;
+						int cblur = imageData.getPixel(ab - 1, bb + 1) + imageData.getPixel(ab + 1, bb + 1) + ran1[r1] * imageData.getPixel(ab, bb + 1) + imageData.getPixel(ab, bb) >> 2;
 						if (cblur > 190) {
 							cblur = 190;
 						}
@@ -202,7 +201,7 @@ public class BurningSea {
 		shell.setText(TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

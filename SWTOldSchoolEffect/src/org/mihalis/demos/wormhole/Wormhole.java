@@ -75,7 +75,6 @@ public class Wormhole {
 			}
 		}
 
-		redrawCanvas();
 	}
 
 	private void initTables() {
@@ -106,8 +105,7 @@ public class Wormhole {
 				y += YCENTER;
 
 				if (x >= 0 && x < MAXX && y >= 0 && y < MAXY) {
-					wormImg[(int) x
-							+ (int) y * MAXX] = (byte) (i / 8 % TEXTUREWIDTH + TEXTUREWIDTH * (j / 7 % TEXTUREWIDTH));
+					wormImg[(int) x + (int) y * MAXX] = (byte) (i / 8 % TEXTUREWIDTH + TEXTUREWIDTH * (j / 7 % TEXTUREWIDTH));
 				}
 			}
 		}
@@ -206,7 +204,7 @@ public class Wormhole {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

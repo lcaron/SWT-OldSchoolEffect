@@ -67,8 +67,7 @@ public class Tunnel2 {
 			for (int y = 0; y < h; y++) {
 				int angle, distance;
 				final float ratio = 32.0f;
-				distance = (int) (ratio * TEX_HEIGHT
-						/ Math.sqrt((x - w / 2.0) * (x - w / 2.0) + (y - h / 2.0) * (y - h / 2.0)) % TEX_HEIGHT);
+				distance = (int) (ratio * TEX_HEIGHT / Math.sqrt((x - w / 2.0) * (x - w / 2.0) + (y - h / 2.0) * (y - h / 2.0)) % TEX_HEIGHT);
 				angle = (int) (0.5 * TEX_WIDTH * Math.atan2(y - h / 2.0, x - w / 2.0) / 3.1416);
 				distanceTable[x][y] = distance;
 				angleTable[x][y] = angle;
@@ -76,7 +75,6 @@ public class Tunnel2 {
 		}
 
 		animation = 0f;
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -88,8 +86,7 @@ public class Tunnel2 {
 			for (int y = 0; y < h; y++) {
 				// get the texel from the texture by using the tables, shifted with the
 				// animation values
-				final int color = texture[Math.abs((distanceTable[x][y] + shiftX) % TEX_WIDTH)][Math
-						.abs((angleTable[x][y] + shiftY) % TEX_HEIGHT)];
+				final int color = texture[Math.abs((distanceTable[x][y] + shiftX) % TEX_WIDTH)][Math.abs((angleTable[x][y] + shiftY) % TEX_HEIGHT)];
 				imageData.setPixel(x, y, color);
 			}
 		}
@@ -104,7 +101,7 @@ public class Tunnel2 {
 		shell.setText("Fire Effect");
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = 256;
 		gdCanvas.heightHint = 256;

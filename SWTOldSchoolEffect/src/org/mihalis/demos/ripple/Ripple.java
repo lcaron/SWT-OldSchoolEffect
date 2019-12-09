@@ -108,8 +108,7 @@ public class Ripple {
 		mapind = oldind;
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				short data = (short) (ripplemap[mapind - width] + ripplemap[mapind + width] + ripplemap[mapind - 1]
-						+ ripplemap[mapind + 1] >> 1);
+				short data = (short) (ripplemap[mapind - width] + ripplemap[mapind + width] + ripplemap[mapind - 1] + ripplemap[mapind + 1] >> 1);
 				data -= ripplemap[newind + i];
 				data -= data >> 5;
 				ripplemap[newind + i] = data;
@@ -147,7 +146,7 @@ public class Ripple {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

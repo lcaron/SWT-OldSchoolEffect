@@ -112,8 +112,9 @@ public class Bump {
 		lX = (int) (CANVAS_WIDTH / 2 + 80 * Math.cos(fTime += .1));
 		lY = (int) (CANVAS_HEIGHT / 2 + 80 * Math.sin(fTime));
 
-		if (!canvas.isDisposed())
-		canvas.redraw();
+		if (!canvas.isDisposed()) {
+			canvas.redraw();
+		}
 	}
 
 	private Shell createWindow() {
@@ -121,7 +122,7 @@ public class Bump {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

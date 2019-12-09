@@ -109,7 +109,6 @@ public class WobbleEffect {
 
 		aci = 0.0D;
 
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -165,7 +164,7 @@ public class WobbleEffect {
 		shell.setText(TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

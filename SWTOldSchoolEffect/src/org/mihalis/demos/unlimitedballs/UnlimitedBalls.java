@@ -66,39 +66,39 @@ public class UnlimitedBalls {
 		ball = new Image(display, getClass().getResourceAsStream("ball.gif"));
 
 		switch (currentShape) {
-		case 0:
-			// First set of parameter
-			xspeed = 100;
-			yspeed = 100;
-			xrspeed = 4150;
-			yrspeed = 4150;
-			xstart = 0;
-			ystart = 0;
-			xrstart = 0;
-			yrstart = 4150;
-			break;
-		case 1:
-			// Second set of parameter
-			xspeed = 199999;
-			yspeed = 100;
-			xrspeed = 550;
-			yrspeed = 950;
-			xstart = 0;
-			ystart = 50;
-			xrstart = 0;
-			yrstart = 0;
-			break;
-		default:
-			// Third set of parameter
-			xspeed = 100;
-			yspeed = 150;
-			xrspeed = 2200;
-			yrspeed = 1100;
-			xstart = 0;
-			ystart = 150;
-			xrstart = 0;
-			yrstart = 1100;
-			break;
+			case 0:
+				// First set of parameter
+				xspeed = 100;
+				yspeed = 100;
+				xrspeed = 4150;
+				yrspeed = 4150;
+				xstart = 0;
+				ystart = 0;
+				xrstart = 0;
+				yrstart = 4150;
+				break;
+			case 1:
+				// Second set of parameter
+				xspeed = 199999;
+				yspeed = 100;
+				xrspeed = 550;
+				yrspeed = 950;
+				xstart = 0;
+				ystart = 50;
+				xrstart = 0;
+				yrstart = 0;
+				break;
+			default:
+				// Third set of parameter
+				xspeed = 100;
+				yspeed = 150;
+				xrspeed = 2200;
+				yrspeed = 1100;
+				xstart = 0;
+				ystart = 150;
+				xrstart = 0;
+				yrstart = 1100;
+				break;
 		}
 	}
 
@@ -128,7 +128,7 @@ public class UnlimitedBalls {
 		shell.setText("Plasma");
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = 512;
 		gdCanvas.heightHint = 512;

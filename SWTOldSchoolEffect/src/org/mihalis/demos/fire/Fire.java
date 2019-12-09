@@ -70,8 +70,7 @@ public class Fire {
 		// do the fire calculations for every pixel, from top to bottom
 		for (int y = 0; y < h - 1; y++) {
 			for (int x = 0; x < w; x++) {
-				fire[x][y] = (fire[(x - 1 + w) % w][(y + 1) % h] + fire[x % w][(y + 1) % h]
-						+ fire[(x + 1) % w][(y + 1) % h] + fire[x % w][(y + 2) % h]) * 32 / 129;
+				fire[x][y] = (fire[(x - 1 + w) % w][(y + 1) % h] + fire[x % w][(y + 1) % h] + fire[(x + 1) % w][(y + 1) % h] + fire[x % w][(y + 2) % h]) * 32 / 129;
 			}
 		}
 
@@ -161,7 +160,7 @@ public class Fire {
 		shell.setText("Fire Effect");
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = 256;
 		gdCanvas.heightHint = 256;

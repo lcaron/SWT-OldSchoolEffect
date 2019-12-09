@@ -41,9 +41,8 @@ public class SimpleScroll {
 	private Image image;
 
 	//
-	private final String[] text = { "ligne 1", "ligne 1 fgsdfsdfgsdf", "ligne 1 sdfg sdg sdfg  sgf s seg", "ligne 1",
-			"ligne 1 sdfgsdfgsdfgdg", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1",
-			"ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1" };
+	private final String[] text = { "ligne 1", "ligne 1 fgsdfsdfgsdf", "ligne 1 sdfg sdg sdfg  sgf s seg", "ligne 1", "ligne 1 sdfgsdfgsdfgdg", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1", "ligne 1",
+			"ligne 1", "ligne 1", "ligne 1", "ligne 1" };
 	private static final String FONT = "Lucida Sans";
 	private static final int FONT_SIZE = 14;
 	private int y;
@@ -100,7 +99,7 @@ public class SimpleScroll {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

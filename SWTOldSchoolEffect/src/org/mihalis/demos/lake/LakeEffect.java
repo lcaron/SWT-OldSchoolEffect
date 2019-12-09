@@ -60,7 +60,6 @@ public class LakeEffect {
 		// Create animation
 		createAnimation();
 
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -103,8 +102,7 @@ public class LakeEffect {
 		final double d = 6.283185307179586D * paramInt / 12.0D;
 		final int i = (12 - paramInt) * imageWidth;
 		for (int j = 0; j < imageHeight; ++j) {
-			final int k = (int) (imageHeight / 14 * (j + 28.0D)
-					* Math.sin(imageHeight / 14 * (imageHeight - j) / (j + 1) + d) / imageHeight);
+			final int k = (int) (imageHeight / 14 * (j + 28.0D) * Math.sin(imageHeight / 14 * (imageHeight - j) / (j + 1) + d) / imageHeight);
 			if (j < -k) {
 				copyArea(paramGraphics, 12 * imageWidth, j, imageWidth, 1, -i, 0);
 			} else {
@@ -115,12 +113,12 @@ public class LakeEffect {
 	}
 
 	/**
-	 * @param x      the <i>x</i> coordinate of the source rectangle.
-	 * @param y      the <i>y</i> coordinate of the source rectangle.
-	 * @param width  the width of the source rectangle.
+	 * @param x the <i>x</i> coordinate of the source rectangle.
+	 * @param y the <i>y</i> coordinate of the source rectangle.
+	 * @param width the width of the source rectangle.
 	 * @param height the height of the source rectangle.
-	 * @param dx     the horizontal distance to copy the pixels.
-	 * @param dy     the vertical distance to copy the pixels.
+	 * @param dx the horizontal distance to copy the pixels.
+	 * @param dy the vertical distance to copy the pixels.
 	 */
 	private void copyArea(GC gc, int x, int y, int width, int height, int dx, int dy) {
 		gc.copyArea(x, y, width, height, x + dx, y + dy);
@@ -131,7 +129,7 @@ public class LakeEffect {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

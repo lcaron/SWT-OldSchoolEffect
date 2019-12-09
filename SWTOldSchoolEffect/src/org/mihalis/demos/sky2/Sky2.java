@@ -52,7 +52,6 @@ public class Sky2 {
 		sprite = new ImageData(getClass().getResourceAsStream("DEMO2.png"));
 		imageData = new ImageData(w, h, sprite.depth, sprite.palette);
 		t = 0;
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -169,7 +168,7 @@ public class Sky2 {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

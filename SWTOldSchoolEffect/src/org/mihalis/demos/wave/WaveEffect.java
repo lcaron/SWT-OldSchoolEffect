@@ -86,8 +86,6 @@ public class WaveEffect {
 				}
 			});
 		}
-
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -103,18 +101,12 @@ public class WaveEffect {
 		for (int i = 0; i < COLS; ++i) {
 			for (int j = 0; j < LINES; ++j) {
 				if (kind == 0) {
-					xPos[i][j] = (int) (patternWidth + 15 * i
-							+ 10.0D * Math.cos(position * (1.0D + 0.01D * i + 0.015D * j)));
-					yPos[i][j] = (int) (patternHeight + 15 * j
-							- 10.0D * Math.sin(position * (1.0D + 0.0123D * j + 0.012D * i)));
+					xPos[i][j] = (int) (patternWidth + 15 * i + 10.0D * Math.cos(position * (1.0D + 0.01D * i + 0.015D * j)));
+					yPos[i][j] = (int) (patternHeight + 15 * j - 10.0D * Math.sin(position * (1.0D + 0.0123D * j + 0.012D * i)));
 				}
 				if (kind == 1) {
-					xPos[i][j] = (int) (patternWidth + 15 * i
-							+ 20.0D * Math.sin(position * (1.0D + 0.0059D * j + 0.00639D * i))
-									* Math.cos(position + 0.3D * i + 0.3D * j));
-					yPos[i][j] = (int) (patternHeight + 15 * j
-							- 20.0D * Math.cos(position * (1.0D - 0.073D * j + 0.008489999999999999D * i))
-									* Math.sin(position + 0.23D * j + 0.389D * i));
+					xPos[i][j] = (int) (patternWidth + 15 * i + 20.0D * Math.sin(position * (1.0D + 0.0059D * j + 0.00639D * i)) * Math.cos(position + 0.3D * i + 0.3D * j));
+					yPos[i][j] = (int) (patternHeight + 15 * j - 20.0D * Math.cos(position * (1.0D - 0.073D * j + 0.008489999999999999D * i)) * Math.sin(position + 0.23D * j + 0.389D * i));
 				}
 				if (kind == 2) {
 					xPos[i][j] = (int) (centerX + 14.0D * i * Math.cos(0.01D * (40.0D - i) * position + j));
@@ -180,7 +172,7 @@ public class WaveEffect {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

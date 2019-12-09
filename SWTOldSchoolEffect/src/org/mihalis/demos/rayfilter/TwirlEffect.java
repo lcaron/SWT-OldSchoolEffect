@@ -86,8 +86,6 @@ public class TwirlEffect {
 		radius2 = radius * radius;
 
 		sens = STEP;
-
-		redrawCanvas();
 	}
 
 	public void animate() {
@@ -165,8 +163,8 @@ public class TwirlEffect {
 	/**
 	 * Bilinear interpolation of ARGB values.
 	 *
-	 * @param x   the X interpolation parameter 0..1
-	 * @param y   the y interpolation parameter 0..1
+	 * @param x the X interpolation parameter 0..1
+	 * @param y the y interpolation parameter 0..1
 	 * @param rgb array of four ARGB values in the order NW, NE, SW, SE
 	 * @return the interpolated value
 	 */
@@ -270,7 +268,7 @@ public class TwirlEffect {
 		shell.setText(TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;

@@ -61,8 +61,6 @@ public class Moving_Starfield {
 
 		centerX = w >> 1;
 		centerY = h >> 1;
-
-		redrawCanvas();
 	}
 
 	/**
@@ -133,7 +131,7 @@ public class Moving_Starfield {
 		shell.setText(SHELL_TITLE);
 		shell.setLayout(new GridLayout(1, false));
 
-		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE);
+		canvas = new Canvas(shell, SWT.BORDER | SWT.NO_REDRAW_RESIZE | SWT.DOUBLE_BUFFERED);
 		final GridData gdCanvas = new GridData(GridData.FILL, GridData.FILL, true, true);
 		gdCanvas.widthHint = CANVAS_WIDTH;
 		gdCanvas.heightHint = CANVAS_HEIGHT;
